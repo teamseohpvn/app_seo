@@ -18,8 +18,11 @@ export async function generateWithGemini(
 ): Promise<ArticleResult> {
   const genAI = new GoogleGenerativeAI(apiKey);
   
-  // Choose model
-  const modelName = req.model || 'gemini-2.0-flash';
+  // Model resolution with automatic upgrade for deprecated models
+  let modelName = req.model || 'gemini-3.6-flash';
+  if (modelName === 'gemini-2.5-flash' || modelName === 'gemini-2.0-flash' || modelName === 'gemini-1.5-pro' || modelName === 'gemini-1.5-flash') {
+    modelName = 'gemini-3.6-flash';
+  }
   
   const model = genAI.getGenerativeModel({
     model: modelName,

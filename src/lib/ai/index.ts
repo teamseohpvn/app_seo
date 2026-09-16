@@ -6,10 +6,18 @@ import { generateWithClaude } from './claude';
 export const AVAILABLE_MODELS: ModelOption[] = [
   // Google Gemini - Thế hệ mới nhất 2026
   {
-    id: 'gemini-3.8-flash',
-    name: 'Gemini 3.8 Flash (Thế hệ mới 2026 ⭐)',
+    id: 'gemini-3.6-flash',
+    name: 'Gemini 3.6 Flash (Khuyên dùng chính thức ⭐)',
     provider: 'gemini',
-    description: 'Thế hệ Gemini 3.x tân tiến nhất: Trí tuệ vượt bậc, văn phong tiếng Việt xuất sắc, tối ưu GEO & E-E-A-T chuẩn xác.',
+    description: 'Mô hình chuẩn của Google: Tốc độ cao, tối ưu GEO & E-E-A-T chuẩn xác, tiếng Việt tự nhiên.',
+    badge: 'Khuyên dùng chính thức',
+    supportsVision: true,
+  },
+  {
+    id: 'gemini-3.8-flash',
+    name: 'Gemini 3.8 Flash (Thế hệ mới 2026)',
+    provider: 'gemini',
+    description: 'Thế hệ Gemini 3.x tân tiến nhất: Trí tuệ vượt bậc, văn phong tiếng Việt xuất sắc.',
     badge: 'Mới nhất 2026',
     supportsVision: true,
   },
@@ -19,14 +27,6 @@ export const AVAILABLE_MODELS: ModelOption[] = [
     provider: 'gemini',
     description: 'Mô hình tư duy chuyên sâu đỉnh cao của Google: Bối cảnh khổng lồ, tổng hợp đa nguồn, viết bài phân tích cấp chuyên gia.',
     badge: 'Trí tuệ cao nhất',
-    supportsVision: true,
-  },
-  {
-    id: 'gemini-2.5-flash',
-    name: 'Gemini 2.5 Flash',
-    provider: 'gemini',
-    description: 'Tốc độ phản hồi tức thì, cân bằng hoàn hảo giữa chi phí và độ thông minh.',
-    badge: 'Tốc độ cao',
     supportsVision: true,
   },
 
