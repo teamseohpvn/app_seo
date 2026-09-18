@@ -46,6 +46,11 @@ HÃY VIẾT BÀI BÁO / BÀI VIẾT CHUẨN SEO 2026:
     promptText += `\n- Từ khóa ngữ nghĩa LSI: ${lsi}`;
   }
 
+  
+  if (req.customPrompt && req.customPrompt.trim()) {
+    promptText += `\n\n- YÊU CẦU ĐẶC BIỆT / PROMPT CHỈ ĐẠO CỦA NGƯỜI DÙNG (YÊU CẦU ĐỌC & VIẾT BÀI):\n"""\n${req.customPrompt.trim()}\n"""\n(QUAN TRỌNG: Hãy đọc kỹ tài liệu và tuân thủ nghiêm ngặt chỉ đạo trên!)`;
+  }
+
   promptText += `\n\nLƯU Ý: CHỈ TRẢ VỀ DUY NHẤT CHUỖI JSON HỢP LỆ VỚI CÁC TRƯỜNG NHƯ ĐÃ QUY ĐỊNH, KHÔNG BỎ THÊM BẤT KỲ VĂN BẢN NÀO BÊN NGOÀI.`;
 
   const contentBlocks: Anthropic.MessageParam['content'] = [];

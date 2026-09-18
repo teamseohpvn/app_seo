@@ -38,10 +38,12 @@ export default function Home() {
     gemini: string;
     openai: string;
     claude: string;
+    openaiBaseUrl?: string;
   }>({
     gemini: '',
     openai: '',
     claude: '',
+    openaiBaseUrl: '',
   });
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -57,6 +59,7 @@ export default function Home() {
   const [keywords, setKeywords] = useState<ParsedKeyword[]>([]);
   const [tone, setTone] = useState<ToneType>('natural');
   const [customTonePrompt, setCustomTonePrompt] = useState('');
+  const [customPrompt, setCustomPrompt] = useState('');
 
   // Generation status & result
   const [isGenerating, setIsGenerating] = useState(false);
@@ -79,6 +82,7 @@ export default function Home() {
     gemini: string;
     openai: string;
     claude: string;
+    openaiBaseUrl?: string;
   }) => {
     setApiKeys(keys);
     localStorage.setItem('appseo_api_keys', JSON.stringify(keys));
@@ -173,8 +177,10 @@ export default function Home() {
           keywords: keywords.map(k => ({ keyword: k.keyword, type: k.type, count: 0 })),
           tone,
           customTonePrompt: tone === 'custom' ? customTonePrompt : undefined,
+          customPrompt: customPrompt.trim() || undefined,
           targetWordCount,
           customApiKey: customKey || undefined,
+          customBaseUrl: selectedModel.provider === 'openai' ? (apiKeys.openaiBaseUrl?.trim() || undefined) : undefined,
         }),
       });
 
@@ -241,6 +247,8 @@ export default function Home() {
               }}
               targetWordCount={targetWordCount}
               onChangeTargetWordCount={setTargetWordCount}
+              customPrompt={customPrompt}
+              onChangeCustomPrompt={setCustomPrompt}
             />
 
             {/* 3. Keyword Uploader */}

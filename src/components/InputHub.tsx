@@ -12,6 +12,7 @@ import {
   X,
   Loader2,
   CheckCircle2,
+  MessageSquareQuote,
 } from 'lucide-react';
 import { InputMode } from '@/lib/ai/types';
 
@@ -29,6 +30,8 @@ interface InputHubProps {
   onSetMedia: (base64?: string, mimeType?: string) => void;
   targetWordCount: number;
   onChangeTargetWordCount: (count: number) => void;
+  customPrompt?: string;
+  onChangeCustomPrompt?: (prompt: string) => void;
 }
 
 export function InputHub({
@@ -45,6 +48,8 @@ export function InputHub({
   onSetMedia,
   targetWordCount,
   onChangeTargetWordCount,
+  customPrompt = '',
+  onChangeCustomPrompt,
 }: InputHubProps) {
   const [isScraping, setIsScraping] = useState(false);
   const [scrapeSuccess, setScrapeSuccess] = useState(false);
@@ -283,6 +288,63 @@ export function InputHub({
           />
         </div>
       )}
+
+      {/* Prompt Chỉ Đạo / Yêu Cầu AI Đọc Và Viết Bài */}
+      <div className="p-4 rounded-xl bg-slate-950 border border-white/10 space-y-2.5">
+        <div className="flex items-center justify-between text-xs">
+          <label className="font-semibold text-slate-200 flex items-center gap-1.5">
+            <MessageSquareQuote className="w-4 h-4 text-emerald-400" />
+            <span>Yêu cầu AI đọc & viết bài (Prompt chỉ đạo)</span>
+          </label>
+          <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+            Tùy biến cao cấp
+          </span>
+        </div>
+        <textarea
+          value={customPrompt}
+          onChange={e => onChangeCustomPrompt?.(e.target.value)}
+          rows={3}
+          placeholder="Nhập hướng dẫn cụ thể cho AI khi đọc tài liệu và viết bài (Ví dụ: Hãy đọc kỹ tài liệu tham khảo, phân tích sâu ưu nhược điểm so với đối thủ X, nhấn mạnh tiêu chuẩn kỹ thuật ISO, viết theo giọng văn chuyên gia nhưng gần gũi, kết bài có CTA liên hệ hotline...)"
+          className="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-white/10 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-sans resize-y min-h-[72px] leading-relaxed"
+        />
+        
+        {/* Quick prompt suggestions */}
+        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+          <span className="text-[11px] text-slate-400 flex items-center gap-1 mr-1">
+            <Sparkles className="w-3 h-3 text-amber-400" /> Gợi ý nhanh:
+          </span>
+          {[
+            'Phân tích sâu ưu nhược điểm và so sánh đối thủ',
+            'Bổ sung số liệu thực tế, case study dẫn chứng',
+            'Văn phong cuốn hút, dẫn dắt dạng storytelling',
+            'Tối ưu chuyển đổi bán hàng & CTA liên hệ cuối bài',
+          ].map((suggestion, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => {
+                const current = (customPrompt || '').trim();
+                const newPrompt = current
+                  ? `${current}. ${suggestion}`
+                  : suggestion;
+                onChangeCustomPrompt?.(newPrompt);
+              }}
+              className="text-[11px] px-2.5 py-1 rounded-md bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-emerald-300 border border-white/5 hover:border-emerald-500/30 transition-all cursor-pointer"
+            >
+              + {suggestion}
+            </button>
+          ))}
+          {customPrompt && (
+            <button
+              type="button"
+              onClick={() => onChangeCustomPrompt?.('')}
+              className="text-[11px] px-2 py-1 rounded-md text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer ml-auto"
+            >
+              Xóa prompt
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Target Word Count Slider */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-white/5">

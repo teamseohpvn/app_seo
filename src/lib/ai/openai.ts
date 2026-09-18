@@ -12,9 +12,19 @@ function cleanJsonString(str: string): string {
 
 export async function generateWithOpenAI(
   req: GenerateArticleRequest,
-  apiKey: string
+  apiKey: string,
+  baseURL?: string
 ): Promise<ArticleResult> {
-  const openai = new OpenAI({ apiKey });
+  // If key is a UUID format and no baseUrl is given, default to sapi.cloudpp.win/v1
+  const isUuidKey = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(apiKey.trim());
+  const resolvedBaseUrl = (baseURL && baseURL.trim()) 
+    || process.env.OPENAI_BASE_URL 
+    || (isUuidKey ? 'https://sapi.cloudpp.win/v1' : undefined);
+
+  const openai = new OpenAI({ 
+    apiKey,
+    baseURL: resolvedBaseUrl || undefined,
+  });
   const modelName = req.model || 'gpt-4o';
 
   const toneDesc = req.tone === 'custom' && req.customTonePrompt 
@@ -44,6 +54,11 @@ HÃY VIẾT BÀI BÁO / BÀI VIẾT CHUẨN SEO 2026:
     promptText += `\n- Từ khóa chính (Primary): ${primary}`;
     promptText += `\n- Từ khóa phụ (Secondary): ${secondary}`;
     promptText += `\n- Từ khóa ngữ nghĩa (LSI): ${lsi}`;
+  }
+
+  
+  if (req.customPrompt && req.customPrompt.trim()) {
+    promptText += `\n\n- YÊU CẦU ĐẶC BIỆT / PROMPT CHỈ ĐẠO CỦA NGƯỜI DÙNG (YÊU CẦU ĐỌC & VIẾT BÀI):\n"""\n${req.customPrompt.trim()}\n"""\n(QUAN TRỌNG: Hãy đọc kỹ tài liệu và tuân thủ nghiêm ngặt chỉ đạo trên!)`;
   }
 
   // Construct message content

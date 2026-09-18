@@ -38,10 +38,12 @@ export interface GenerateArticleRequest {
   keywords: ParsedKeyword[];
   tone: ToneType;
   customTonePrompt?: string;
+  customPrompt?: string; // Prompt chỉ đạo / Yêu cầu AI đọc và viết bài
   targetWordCount?: number;
   includeFaqSchema?: boolean;
   includeComparisonTable?: boolean;
   customApiKey?: string; // Optional BYOK key
+  customBaseUrl?: string; // Optional Custom OpenAI Base URL / Proxy
 }
 
 export interface ArticleResult {

@@ -3,11 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { X, Key, ExternalLink, ShieldCheck, Check, Info } from 'lucide-react';
 
+interface ApiKeysConfig {
+  gemini: string;
+  openai: string;
+  claude: string;
+  openaiBaseUrl?: string;
+}
+
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (keys: { gemini: string; openai: string; claude: string }) => void;
-  initialKeys: { gemini: string; openai: string; claude: string };
+  onSave: (keys: ApiKeysConfig) => void;
+  initialKeys: ApiKeysConfig;
 }
 
 export function SettingsModal({
@@ -16,11 +23,21 @@ export function SettingsModal({
   onSave,
   initialKeys,
 }: SettingsModalProps) {
-  const [keys, setKeys] = useState(initialKeys);
+  const [keys, setKeys] = useState<ApiKeysConfig>({
+    gemini: initialKeys.gemini || '',
+    openai: initialKeys.openai || '',
+    claude: initialKeys.claude || '',
+    openaiBaseUrl: initialKeys.openaiBaseUrl || '',
+  });
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    setKeys(initialKeys);
+    setKeys({
+      gemini: initialKeys.gemini || '',
+      openai: initialKeys.openai || '',
+      claude: initialKeys.claude || '',
+      openaiBaseUrl: initialKeys.openaiBaseUrl || '',
+    });
   }, [initialKeys]);
 
   if (!isOpen) return null;
@@ -118,12 +135,38 @@ export function SettingsModal({
               type="password"
               value={keys.openai}
               onChange={e => setKeys({ ...keys, openai: e.target.value })}
-              placeholder="sk-proj-..."
+              placeholder="sk-proj-... hoặc mã kích hoạt Proxy"
               className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-white/10 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 font-mono"
             />
             <p className="text-[11px] text-slate-500">
-              Dùng cho GPT-4o, GPT-4o Mini.
+              Dùng cho GPT-4o, GPT-4o Mini hoặc Codex Proxy.
             </p>
+
+            {/* OpenAI Custom Base URL / Proxy Endpoint */}
+            <div className="pt-2">
+              <div className="flex items-center justify-between text-xs mb-1">
+                <label className="text-slate-400 flex items-center gap-1">
+                  <span>OpenAI Base URL / Proxy Endpoint (Tùy chọn)</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setKeys({ ...keys, openaiBaseUrl: 'https://sapi.cloudpp.win/v1' })}
+                  className="text-[11px] text-emerald-400 hover:text-emerald-300 underline"
+                >
+                  Dùng Codex Proxy (TapHoaAI)
+                </button>
+              </div>
+              <input
+                type="text"
+                value={keys.openaiBaseUrl || ''}
+                onChange={e => setKeys({ ...keys, openaiBaseUrl: e.target.value })}
+                placeholder="Mặc định: https://api.openai.com/v1 (hoặc https://sapi.cloudpp.win/v1)"
+                className="w-full px-3 py-2 rounded-lg bg-slate-950/80 border border-white/10 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"
+              />
+              <p className="text-[10px] text-slate-500 mt-1">
+                Để trống nếu dùng OpenAI chính thức. Nhập URL nếu mua qua đại lý proxy (như taphoai, one-api...).
+              </p>
+            </div>
           </div>
 
           {/* Anthropic Claude API Key */}

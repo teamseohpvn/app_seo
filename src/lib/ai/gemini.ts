@@ -71,6 +71,11 @@ HÃY VIẾT MỘT BÀI BÁO / BÀI VIẾT CHUẨN SEO 2026 THEO YÊU CẦU SAU:
   promptText += `\n5. ĐỘ DÀI MỤC TIÊU: Khoảng ${req.targetWordCount || 1500} từ.`;
   promptText += `\n6. BẢO ĐẢM CÓ: Khối Direct Answer, Key Takeaways, Bảng so sánh (Table), FAQ Schema JSON-LD.`;
 
+  
+  if (req.customPrompt && req.customPrompt.trim()) {
+    promptText += `\n\n7. YÊU CẦU ĐẶC BIỆT / PROMPT CHỈ ĐẠO CỦA NGƯỜI DÙNG:\n"""\n${req.customPrompt.trim()}\n"""\n(QUAN TRỌNG: Hãy đọc kỹ tài liệu và tuân thủ nghiêm ngặt chỉ đạo trên trong suốt quá trình phân tích và viết bài!)`;
+  }
+
   promptParts.push(promptText);
 
   // If multimodal image/video is provided

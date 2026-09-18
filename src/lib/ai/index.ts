@@ -47,6 +47,14 @@ export const AVAILABLE_MODELS: ModelOption[] = [
     badge: 'Nhanh',
     supportsVision: true,
   },
+  {
+    id: 'gpt-5.4',
+    name: 'GPT-5.4 (Codex Proxy)',
+    provider: 'openai',
+    description: 'Mô hình thế hệ mới qua cổng Codex Proxy / TapHoaAI với năng lực tư duy vượt trội.',
+    badge: 'Codex Proxy',
+    supportsVision: true,
+  },
 
   // Anthropic Claude
   {
@@ -61,19 +69,15 @@ export const AVAILABLE_MODELS: ModelOption[] = [
     id: 'claude-3-5-haiku-20241022',
     name: 'Claude 3.5 Haiku',
     provider: 'claude',
-    description: 'Nhỏ gọn, phản hồi tức thì với khả năng diễn đạt lưu loát.',
-    badge: 'Siêu tốc',
-    supportsVision: true,
+    description: 'Tốc độ phản hồi tức thì, viết nhanh và súc tích.',
+    badge: 'Tốc độ',
+    supportsVision: false,
   },
 ];
 
 export async function generateArticle(
   req: GenerateArticleRequest,
-  serverApiKeys: {
-    gemini?: string;
-    openai?: string;
-    claude?: string;
-  }
+  serverApiKeys: { gemini?: string; openai?: string; claude?: string }
 ): Promise<ArticleResult> {
   const customKey = req.customApiKey?.trim();
 
@@ -95,7 +99,7 @@ export async function generateArticle(
           'Thiếu OpenAI API Key! Hãy cấu hình trong Cài đặt (Settings) hoặc thêm OPENAI_API_KEY vào biến môi trường.'
         );
       }
-      return generateWithOpenAI(req, apiKey);
+      return generateWithOpenAI(req, apiKey, req.customBaseUrl);
     }
 
     case 'claude': {
